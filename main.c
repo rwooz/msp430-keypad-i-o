@@ -29,13 +29,13 @@ int main(void)
 {
     // Disable watch dog timer
     WDTCTL = WDTPW+WDTHOLD;
-	
-	// Set all pins as inputs
+
+    // Set all pins as inputs
     P1DIR = 0;
     P2DIR = 0;
 
-	// pins 0, 1, 2, 3 of port 1 read values from the rows of the numpads
-	// Pins 0, 1, 2 of port 2 feed into the columns of the numpad
+    // pins 0, 1, 2, 3 of port 1 read values from the rows of the numpads
+    // Pins 0, 1, 2 of port 2 feed into the columns of the numpad
     // pins 4,5 of port 1 and pins 3,4 of port 2 feed the different pumps
     P1DIR |= (BIT0 | BIT1 | BIT2 | BIT3 | BIT4 | BIT5);
     P2DIR |= (BIT3 | BIT4 | BIT5);
@@ -58,6 +58,7 @@ int main(void)
             {
                 if(P2IN & io_pins[col]) //if the row and the column are high, there is a match
                 {
+
                     //led_output(keymap_hex[row*3+col]); //led debug
                     if(keypress2 == 0xC)                //detect if first keypress or 2nd keypress
                     {
@@ -80,40 +81,47 @@ int main(void)
                         if(keypress1 == 0xA && keypress2 == 0x0)        //recipe for 0-1 (rum and coke 2:5)
                         {
                             P1OUT |= BIT4;
-							P2OUT |= BIT3;
-                            __delay_cycles(36000000);
+                            P2OUT |= BIT3;
+                            __delay_cycles(15000000);
                             P1OUT &= ~BIT4;
-							__delay_cycles(50000000);
-							P2OUT &= ~BIT3;
+                            __delay_cycles(38000000);
+                            P2OUT &= ~BIT3;
                         }
                         if(keypress1 == 0xA && keypress2 == 0x1)        //recipe for 0-2 (dark and stormy 2:5)
                         {
                             P1OUT |= BIT4;
-							P2OUT |= BIT4;
+                            P2OUT |= BIT4;
                             __delay_cycles(36000000);
                             P1OUT &= ~BIT4;
-							__delay_cycles(50000000);
-							P2OUT &= ~BIT4;
+                            __delay_cycles(54000000);
+                            P2OUT &= ~BIT4;
                         }
                         if(keypress1 == 0xA && keypress2 == 0x2)        //recipe for 0-3 (moscow mule 2:5)
                         {
                             P1OUT |= BIT5;
-							P2OUT |= BIT4;
-							__delay_cycles(36000000);
-							P1OUT &= ~BIT5;
-							__delay_cycles(50000000);
-							P2OUT &= ~BIT4;
+                            P2OUT |= BIT4;
+                            __delay_cycles(36000000);
+                            P1OUT &= ~BIT5;
+                            __delay_cycles(54000000);
+                            P2OUT &= ~BIT4;
                         }
-						if(keypress1 == 0xA && keypress2 == 0x3)		//recipe for 0-4 (something probably gross 1:1:1:1)
-						{
-							P1OUT |= (BIT4 | BIT5);
-							P2OUT |= (BIT3 | BIT4);
-							__delay_cycles(30000000);
-							P1OUT &= ~(BIT4 | BIT5);
-							P2OUT &= ~(BIT3 | BIT4);
-						}
+                        if(keypress1 == 0xA && keypress2 == 0x3)        //recipe for 0-4 (something probably gross 1:1:1:1)
+                        {
+                            P1OUT |= (BIT4 | BIT5);
+                            P2OUT |= (BIT3 | BIT4);
+                            __delay_cycles(30000000);
+                            P1OUT &= ~(BIT4 | BIT5);
+                            P2OUT &= ~(BIT3 | BIT4);
+                        }
+                        else
+                        {
+                            P1OUT &= ~(BIT4 | BIT5);
+                            P2OUT &= ~(BIT3 | BIT4);
+                        }
                         keypress1 = 0xC;
                         keypress2 = 0xC;
+                        P1OUT = 0;
+                        P2OUT = 0;
                     }
                 }
             }
